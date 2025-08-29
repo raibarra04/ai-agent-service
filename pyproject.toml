@@ -1,7 +1,7 @@
 [project]
 name = "ai-agent-service"
 version = "0.1.0"
-description = "Add your description here"
+description = "Build an AI agent with Python using Google Geminis API"
 readme = "README.md"
 requires-python = ">=3.12"
 dependencies = [
