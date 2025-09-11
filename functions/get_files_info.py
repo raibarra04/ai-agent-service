@@ -1,27 +1,23 @@
 import os
 
+
 def get_files_info(working_directory, directory="."):
+    abs_working_dir = os.path.abspath(working_directory)
+    target_dir = os.path.abspath(os.path.join(working_directory, directory))
+    if not target_dir.startswith(abs_working_dir):
+        return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
+    if not os.path.isdir(target_dir):
+        return f'Error: "{directory}" is not a directory'
     try:
-        working_abs_path = os.path.abspath(working_directory)
-        combined_relative_path = os.path.join(working_directory, directory)
-        dir_abs_path = os.path.abspath(combined_relative_path)
-
-        if (not dir_abs_path.startswith(working_abs_path)):
-            raise ValueError(f'Cannot list "{directory}" as it is outside the permitted working directory')
-        if (not os.path.isdir(dir_abs_path)):
-            raise ValueError(f'"{directory}" is not a directory')
-        else:
-            dir_arg = f"'{directory}'"
-            if directory == '.':
-                dir_arg = 'current'
-
-            for item in os.listdir(dir_abs_path):
-                file_abs_path = os.path.join(dir_abs_path, item)
-                file_size = os.path.getsize(file_abs_path)
-                is_dir = os.path.isfile(file_abs_path)
-                print(f'- {item}: file-size={file_size} bytes, is_dir={is_dir}')
-        return 0
-    
+        files_info = []
+        for filename in os.listdir(target_dir):
+            filepath = os.path.join(target_dir, filename)
+            file_size = 0
+            is_dir = os.path.isdir(filepath)
+            file_size = os.path.getsize(filepath)
+            files_info.append(
+                f"- {filename}: file_size={file_size} bytes, is_dir={is_dir}"
+            )
+        return "\n".join(files_info)
     except Exception as e:
-        print(f'Error: {str(e)}')
-        return 1
+        return f"Error listing files: {e}"
