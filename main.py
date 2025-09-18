@@ -42,7 +42,7 @@ def main():
                     model="gemini-2.0-flash-001",
                     contents=messages,
                     config=types.GenerateContentConfig(
-                        tools=available_functions, system_instruction=system_prompt),
+                        tools=[available_functions], system_instruction=system_prompt),
                     )
 
             if (len(response.candidates) > 0):      
